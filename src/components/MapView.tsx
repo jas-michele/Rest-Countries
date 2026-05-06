@@ -35,6 +35,14 @@ export default function MapView() {
 
     const [favorites, setFavorites] = useState<string[]>([]);
 
+    const filteredCountries = countries?.filter((country) =>
+            country.name.common
+            .toLowerCase()
+            .includes(search.toLocaleLowerCase())
+)
+
+console.log(filteredCountries)
+
     useEffect(() => {
         const stored = localStorage.getItem("favorites");
         if (stored) {
@@ -64,7 +72,7 @@ export default function MapView() {
             <MapContainer
                 key="map"
                 center={center}
-                zoom={2}
+                zoom={search ? 4 : 2}
                 className="map"
             >
 
@@ -103,6 +111,22 @@ export default function MapView() {
                     }}
 
                 />
+
+                {filteredCountries.map((country) => (
+                    <Marker
+                        key={country.name.common}
+                        position={[
+                            country.latlng[0],
+                            country.latlng[1],
+                        ] as [number, number]}
+                    >  
+                    
+                    <Popup>
+                        {country.name.common}
+                    </Popup>
+                       
+                    </Marker>
+                ))}
 
             </MapContainer>
         </div>
