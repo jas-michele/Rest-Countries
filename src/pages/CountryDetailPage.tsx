@@ -38,6 +38,18 @@ export default function CountryDetailPage() {
             <p><strong>Capital:</strong> {country.capital?.[0]} </p>
             <p><strong>Region:</strong> {country.region} </p>
             <p><strong>Population</strong> {country.population.toLocaleString()} </p>
+
+            {country.borders && (
+                <div style={{ marginTop: "10px"}}>
+                    <h3>Border Countries</h3>
+
+                    {country.borders.map((code: string) => (
+                        <span key={code} style={{ marginRight: "10px"}}>
+                            {code}
+                        </span>
+                    ))}
+                 </div>
+            )}
         </div>
     )
 }
