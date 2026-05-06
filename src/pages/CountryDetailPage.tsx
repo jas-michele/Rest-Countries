@@ -6,7 +6,12 @@ import useWeather from "../hooks/useWeather";
 
 
 interface WeatherData {
-    
+    location: {
+        lat: number;
+        lon: number;
+        name: string;
+    }
+
     current: {
         temp_f: number;
         condition: {
@@ -68,15 +73,13 @@ export default function CountryDetailPage() {
 
     const capital = country?.capital?.[0] || country?.name?.common || "";
 
-    const lat = country?.latlng?.[0];
-    const lng = country?.latlng?.[1];
 
     const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 
     const weatherUrl = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${capital}`
 
-        console.log(weatherUrl)
+    console.log(weatherUrl)
 
     const {
         data: weather,
@@ -84,6 +87,9 @@ export default function CountryDetailPage() {
         error: weatherError,
 
     } = useWeather<WeatherData>(weatherUrl)
+
+    const lat = weather.location.lat;
+    const lng = weather.location.lon;
 
     if (loading) return <p>Loading country... </p>
     if (error) return <p>{error.message}</p>
@@ -145,21 +151,21 @@ export default function CountryDetailPage() {
 
             {lat && lng && (
                 <a
-                href={`https://www.google.com/maps?q=${lat},${lng}`}  
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                    display: "inline-block",
-                    marginTop: "15px",
-                    textDecoration: "none"
+                    href={`https://www.google.com/maps?q=${lat},${lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                        display: "inline-block",
+                        marginTop: "15px",
+                        textDecoration: "none"
 
-                }}
+                    }}
                 >
                     📍 View on Google Maps
                 </a>
 
-                
-                )}
+
+            )}
 
             {country.borders && (
                 <div style={{ marginTop: "10px" }}>
