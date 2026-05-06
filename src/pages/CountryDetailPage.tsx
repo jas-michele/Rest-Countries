@@ -13,11 +13,34 @@ export default function CountryDetailPage() {
 
     useEffect(() => {
         const stored = localStorage.getItem("favorites");
-        if(stored) {
-            setFavorites(JSON.parse(stored))
+
+        try {
+
+            if (stored) {
+                setFavorites(JSON.parse(stored))
+            }
+        } catch (err) {
+            console.error("Invalid favorites data, resetting... ")
+            localStorage.removeItem("favorites")
         }
+
     }, [])
 
+    useEffect(() => {
+        localStorage.setItem("favorites", JSON.stringify(favorites))
+    }, [favorites])
+
+    const toggleFavorite = () => {
+        if (!country) return;
+
+        const name = country.name.common;
+
+        if (favorites.includes(name)) {
+            setFavorites(favorites.filter((f) => f !== name))
+        } else {
+            setFavorites([...favorites, name])
+        }
+    }
 
 
     const { data: countryData, loading, error } =
@@ -25,17 +48,17 @@ export default function CountryDetailPage() {
             `https://restcountries.com/v3.1/name/${encodeURIComponent(decodedName)}`
         );
 
-        const {data: allCountries} = 
-            useCountries<any[]>(
-                 "https://restcountries.com/v3.1/all?fields=name,cca3"
-            )
+    const { data: allCountries } =
+        useCountries<any[]>(
+            "https://restcountries.com/v3.1/all?fields=name,cca3"
+        )
 
     if (loading) return <p>Loading country... </p>
     if (error) return <p>{error.message}</p>
     if (!allCountries || !countryData) return null;
 
     const country = countryData?.[0];
-    
+
 
     if (!country) return <p>Country not found</p>
 
@@ -46,6 +69,12 @@ export default function CountryDetailPage() {
             <button onClick={() => navigate(-1)}>⬅ Back</button>
 
             <h1>{country.name.common}</h1>
+
+            <button onClick={toggleFavorite}>
+                {favorites.includes(country.name.common)
+                    ? "Remove Favorite"
+                    : "⭐️ Add to Favorites"}
+            </button>
 
             <img
                 src={country.flags.png}
