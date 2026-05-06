@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import useCountries from "../hooks/useCounties";
+import { useState, useEffect } from "react";
 
 
 console.log("Detail Pag Loaded")
@@ -8,6 +9,16 @@ export default function CountryDetailPage() {
     const { name } = useParams();
     const decodedName = decodeURIComponent(name || "");
     const navigate = useNavigate();
+    const [favorites, setFavorites] = useState<string[]>([]);
+
+    useEffect(() => {
+        const stored = localStorage.getItem("favorites");
+        if(stored) {
+            setFavorites(JSON.parse(stored))
+        }
+    }, [])
+
+
 
     const { data: countryData, loading, error } =
         useCountries<any[]>(
@@ -25,9 +36,6 @@ export default function CountryDetailPage() {
 
     const country = countryData?.[0];
     
-
-      console.log("Decoded", decodedName)
-      console.log("Found country", country?.name?.common)
 
     if (!country) return <p>Country not found</p>
 
