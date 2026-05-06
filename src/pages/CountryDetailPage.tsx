@@ -1,9 +1,21 @@
 import { useParams, useNavigate } from "react-router-dom";
 import useCountries from "../hooks/useCounties";
 import { useState, useEffect } from "react";
+import useWeather from "../hooks/useWeather";
 
 
-console.log("Detail Pag Loaded")
+
+interface WeatherData {
+    
+    current: {
+        temp_f: number;
+        condition: {
+            text: string;
+        };
+        humidity: number;
+        wind_mph: number;
+    };
+}
 
 export default function CountryDetailPage() {
     const { name } = useParams();
@@ -52,12 +64,32 @@ export default function CountryDetailPage() {
         useCountries<any[]>(
             "https://restcountries.com/v3.1/all?fields=name,cca3"
         )
+    const country = countryData?.[0];
+
+    const capital = country?.capital?.[0] || country?.name?.common || "";
+
+    const lat = country?.latlng?.[0];
+    const lng = country?.latlng?.[1];
+
+    const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+
+
+    const weatherUrl = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${capital}`
+
+        console.log(weatherUrl)
+
+    const {
+        data: weather,
+        loading: weatherLoading,
+        error: weatherError,
+
+    } = useWeather<WeatherData>(weatherUrl)
 
     if (loading) return <p>Loading country... </p>
     if (error) return <p>{error.message}</p>
     if (!allCountries || !countryData) return null;
 
-    const country = countryData?.[0];
+
 
 
     if (!country) return <p>Country not found</p>
@@ -82,9 +114,52 @@ export default function CountryDetailPage() {
                 style={{ width: "200px", marginTop: "10px" }}
             />
 
-            <p><strong>Capital:</strong> {country.capital?.[0]} </p>
+            <p><strong>Capital:</strong> {country?.capital?.[0]} </p>
             <p><strong>Region:</strong> {country.region} </p>
             <p><strong>Population</strong> {country.population.toLocaleString()} </p>
+
+            <br />
+
+            <h2>Current Weather</h2>
+
+            {weatherLoading && <p>Loading weather...</p>}
+
+            {weatherError && <p>Error loading weather</p>}
+
+            {weather && (
+                <div>
+                    <p>
+                        🌡️ Temperature: {weather.current.temp_f}F
+                    </p>
+                    <p>
+                        ☁️ Condition: {weather.current.condition.text}
+                    </p>
+                    <p>
+                        💧 Humidity: {weather.current.humidity}%
+                    </p>
+                    <p>
+                        💨 Wind: {weather.current.wind_mph}mph
+                    </p>
+                </div>
+            )}
+
+            {lat && lng && (
+                <a
+                href={`https://www.google.com/maps?q=${lat},${lng}`}  
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    display: "inline-block",
+                    marginTop: "15px",
+                    textDecoration: "none"
+
+                }}
+                >
+                    📍 View on Google Maps
+                </a>
+
+                
+                )}
 
             {country.borders && (
                 <div style={{ marginTop: "10px" }}>
