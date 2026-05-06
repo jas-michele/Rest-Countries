@@ -6,6 +6,8 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { GeoJSON } from "react-leaflet";
+import worldGeo from "../data/world.json"
 
 
 import { useNavigate } from "react-router-dom";
@@ -68,46 +70,41 @@ export default function MapView() {
 
                 <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
 
-               {countries
-               .filter((country) => 
-                    country.name.common 
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-                     )
-                     .map((country, index) => {
-                        if (!country.latlng) return null;
+                <GeoJSON
+                    data={worldGeo as any}
+                    style={(feature) => {
+                        const countryName = feature.properties?.name;
 
-                        const isFavorite = favorites.includes(
-                            country.name.common
-                        );
-                     
+                        const isFavorite = favorites.includes(countryName);
+               
 
-                    return (
-                        <Marker
-                            key={index}
-                            position={[country.latlng[0], country.latlng[1]]}
-                        >
+                        return {
+                            fillColor: isFavorite
+                            ? "#FFD700"
+                            : "#3b82f6",
 
-                            <Popup>
-                                <div
-                                    onClick={() => {
-                                        navigate(`/country/${encodeURIComponent(country.name.common)}`)
-                                    }}
-                                    style={{ cursor: "pointer" }}
-                                >
+                            weight: 1,
+                            color: "#0f172a",
+                            fillOpacity: 0.8,
+                        }
 
-                                    <strong>
-                                        {country.name.common}
-                                        {isFavorite ? "⭐️" : ""}
+                    }}
 
-                                    </strong>
+                    onEachFeature={(feature, layer) => {
+                        const countryName = feature.properties.name;
 
-                                    <p>Click to view details</p>
-                                </div>
-                            </Popup>
-                        </Marker>
-                    )
-                })}
+                        layer.on({
+                            click: () => {
+                                navigate(
+                                    `/country/${encodeURIComponent(countryName)}`
+                                )
+                            }
+                        })
+                    }}
+
+                />
+
             </MapContainer>
         </div>
-)}
+    )
+}
