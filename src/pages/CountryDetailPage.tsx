@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import useCountries from "../hooks/useCounties";
 
+
 console.log("Detail Pag Loaded")
 
 export default function CountryDetailPage() {
@@ -8,16 +9,25 @@ export default function CountryDetailPage() {
     const decodedName = decodeURIComponent(name || "");
     const navigate = useNavigate();
 
-    const { data: countries, loading, error } =
+    const { data: countryData, loading, error } =
         useCountries<any[]>(
             `https://restcountries.com/v3.1/name/${encodeURIComponent(decodedName)}`
         );
 
+        const {data: allCountries} = 
+            useCountries<any[]>(
+                 "https://restcountries.com/v3.1/all?fields=name,cca3"
+            )
+
     if (loading) return <p>Loading country... </p>
     if (error) return <p>{error.message}</p>
-    if (!countries) return null;
+    if (!allCountries || !countryData) return null;
 
-    const country = countries?.[0];
+    const country = countryData?.[0];
+    
+
+      console.log("Decoded", decodedName)
+      console.log("Found country", country?.name?.common)
 
     if (!country) return <p>Country not found</p>
 
@@ -40,15 +50,31 @@ export default function CountryDetailPage() {
             <p><strong>Population</strong> {country.population.toLocaleString()} </p>
 
             {country.borders && (
-                <div style={{ marginTop: "10px"}}>
+                <div style={{ marginTop: "10px" }}>
                     <h3>Border Countries</h3>
 
-                    {country.borders.map((code: string) => (
-                        <span key={code} style={{ marginRight: "10px"}}>
-                            {code}
-                        </span>
-                    ))}
-                 </div>
+                    {country.borders.map((code: string) => {
+                        const borderCountry = allCountries.find(
+                            (c) => c.cca3 === code
+                        );
+
+                        if (!borderCountry) return null;
+
+                        return (
+                            <button
+                                key={code}
+                                onClick={() =>
+                                    navigate(
+                                        `/country/${encodeURIComponent(borderCountry.name.common)}`
+                                    )
+                                }
+                                style={{ marginRight: "10px" }}
+                            >
+                                {borderCountry.name.common}
+                            </button>
+                        )
+                    })}
+                </div>
             )}
         </div>
     )
