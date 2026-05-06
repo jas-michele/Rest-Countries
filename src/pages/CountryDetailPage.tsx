@@ -72,12 +72,14 @@ export default function CountryDetailPage() {
     const country = countryData?.[0];
 
     const capital = country?.capital?.[0] || country?.name?.common || "";
+    console.log(capital)
 
 
     const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 
-    const weatherUrl = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${capital}`
+    const weatherUrl =
+        `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${encodeURIComponent(`${capital}, ${country?.name?.common}`)}`;
 
     console.log(weatherUrl)
 
@@ -88,8 +90,8 @@ export default function CountryDetailPage() {
 
     } = useWeather<WeatherData>(weatherUrl)
 
-    const lat = weather.location.lat;
-    const lng = weather.location.lon;
+    const lat = weather?.location.lat;
+    const lng = weather?.location.lon;
 
     if (loading) return <p>Loading country... </p>
     if (error) return <p>{error.message}</p>
@@ -149,7 +151,7 @@ export default function CountryDetailPage() {
                 </div>
             )}
 
-            {lat && lng && (
+            {lat !== undefined && lng !== undefined && (
                 <a
                     href={`https://www.google.com/maps?q=${lat},${lng}`}
                     target="_blank"
