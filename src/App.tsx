@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/country/name" element={<CountryDetailPage />} />
+        <Route path="/country/:name" element={<CountryDetailPage />} />
       </Routes>
     </BrowserRouter>
   )

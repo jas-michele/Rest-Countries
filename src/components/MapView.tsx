@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import useCountries from "../hooks/useCounties";
 import L from "leaflet";
@@ -15,19 +15,19 @@ L.Icon.Default.mergeOptions({
 })
 
 
-        console.log("MapView rendering")
+console.log("MapView rendering")
 
 export default function MapView() {
     const center: [number, number] = [20, 0];
     const navigate = useNavigate();
 
 
-    const  { data: countries, loading, error} =
+    const { data: countries, loading, error } =
         useCountries<any[]>("https://restcountries.com/v3.1/all?fields=name,latlng");
 
-        if (loading) return <p>Loading map... </p>
-        if (error) return <p>{error?.message}</p>
-        if (!countries) return null;
+    if (loading) return <p>Loading map... </p>
+    if (error) return <p>{error?.message}</p>
+    if (!countries) return null;
 
     return (
 
@@ -36,31 +36,37 @@ export default function MapView() {
             center={center}
             zoom={2}
             className="map"
-           >
+        >
 
-            <TileLayer  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
-            
-        {countries.map((country, index) => {
-            if (!country.latlng) return null;
+            <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
 
-            return (
-                <Marker 
-                 key={index}
-                 position={[country.latlng[0], country.latlng[1]]}
-                 eventHandlers={{
-                    click: () => {
-                        navigate(`/country${country.name.common}`)
-                    }
-                 }}
-                 >
-                    <Popup>
-                        <strong>{country.name.common}</strong>
-                    </Popup>
-                 </Marker>
-            )
-        })}
+            {countries.map((country, index) => {
+                if (!country.latlng) return null;
+
+                return (
+                    <Marker
+                        key={index}
+                        position={[country.latlng[0], country.latlng[1]]}
+                        >
+
+                        <Popup>
+                            <div
+                                onClick={() => {
+                                    console.log("CLICKED:", country.name.common)
+                                    navigate(`/country/${encodeURIComponent(country.name.common)}`)
+                                }}
+                                style={{ cursor: "pointer"}}
+                               >
+
+                            <strong>{country.name.common}</strong>
+                            <p>Click to view details</p>
+                            </div>
+                        </Popup>
+                    </Marker>
+                )
+            })}
 
 
-       </MapContainer>
+        </MapContainer>
     )
 }
