@@ -137,7 +137,7 @@ export default function CountryDetailPage() {
             {weather && (
                 <div>
                     <p>
-                        🌡️ Temperature: {weather.current.temp_f}F
+                        🌡️ Temperature: {weather.current.temp_f}°F
                     </p>
                     <p>
                         ☁️ Condition: {weather.current.condition.text}
