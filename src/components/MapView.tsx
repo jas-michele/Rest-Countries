@@ -5,6 +5,8 @@ import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
+import { useNavigate } from "react-router-dom";
+
 delete (L.Icon.Default.prototype as any).getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -17,6 +19,8 @@ L.Icon.Default.mergeOptions({
 
 export default function MapView() {
     const center: [number, number] = [20, 0];
+    const navigate = useNavigate();
+
 
     const  { data: countries, loading, error} =
         useCountries<any[]>("https://restcountries.com/v3.1/all?fields=name,latlng");
@@ -43,6 +47,11 @@ export default function MapView() {
                 <Marker 
                  key={index}
                  position={[country.latlng[0], country.latlng[1]]}
+                 eventHandlers={{
+                    click: () => {
+                        navigate(`/country${country.name.common}`)
+                    }
+                 }}
                  >
                     <Popup>
                         <strong>{country.name.common}</strong>
