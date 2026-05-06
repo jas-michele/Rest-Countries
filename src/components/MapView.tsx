@@ -34,7 +34,7 @@ export default function MapView() {
             className="map"
            >
 
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <TileLayer  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
             
         {countries.map((country, index) => {
             if (!country.latlng) return null;
