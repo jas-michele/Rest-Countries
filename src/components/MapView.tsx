@@ -19,6 +19,12 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow
 })
 
+const customIcon = new L.Icon({
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+});
 
 console.log("MapView rendering")
 
@@ -112,13 +118,15 @@ console.log(filteredCountries)
 
                 />
 
-                {filteredCountries.map((country) => (
+                {search &&
+                filteredCountries.map((country) => (
                     <Marker
                         key={country.name.common}
                         position={[
                             country.latlng[0],
                             country.latlng[1],
                         ] as [number, number]}
+                        icon={customIcon as any}
                     >  
                     
                     <Popup>
