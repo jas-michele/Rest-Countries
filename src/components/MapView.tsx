@@ -27,6 +27,15 @@ const customIcon = new L.Icon({
     iconAnchor: [12, 41],
 });
 
+const countryAlias: Record<string, string> = {
+    "United States of Americe": "Unites States",
+
+    "Russian Federation": "Russia",
+
+    "Democratic Republic of Congo": "Congo",
+
+    "Republic of the Congo": "Congo",
+}
 
 export default function MapView() {
     const center: [number, number] = [20, 0];
@@ -133,6 +142,9 @@ export default function MapView() {
                     onEachFeature={(feature, layer) => {
                         const countryName = feature.properties.name;
 
+                        const normalizedName = 
+                            countryAlias[countryName] || countryName;
+
                         const countryCode = feature.properties.iso_a3;
 
                         const capital = feature.properties.capital || countryName;
@@ -172,7 +184,7 @@ export default function MapView() {
                                     }
 
                                         <button 
-                                             onclick="window.location.href='/country/${encodeURIComponent(countryName)}'"
+                                             onclick="window.location.href='/country/${encodeURIComponent(normalizedName)}'"
                                              >
                                              View Details
                                           </button>      
