@@ -150,6 +150,21 @@ export default function MapView() {
                         const capital = feature.properties.capital || countryName;
 
                         layer.on({
+
+                            mouseover: (e) => {
+                                e.target.setStyle({
+                                    fillOpacity: 1,
+                                    weight: 2,
+                                });
+                            },
+
+                            mouseout: (e) => {
+                                e.target.setStyle({
+                                    fillOpacity: 0.8,
+                                    weight: 1
+                                })
+                            },
+
                             click: async () => {
                                 layer.bindPopup(`
                                     <div class="popup">
