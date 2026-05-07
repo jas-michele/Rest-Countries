@@ -32,9 +32,9 @@ const countryAlias: Record<string, string> = {
 
     "Russian Federation": "Russia",
 
-    "Democratic Republic of Congo": "Congo",
+    "Democratic Republic of the Congo": "Democratic Republic of the Congo",
 
-    "Republic of the Congo": "Congo",
+    "Republic of the Congo": "Republic of the Congo",
 }
 
 export default function MapView() {
@@ -145,6 +145,7 @@ export default function MapView() {
                     onEachFeature={(feature, layer) => {
                         const countryName = feature.properties.name;
 
+                        console.log(countryName)
                         const normalizedName = 
                             countryAlias[countryName] || countryName;
 

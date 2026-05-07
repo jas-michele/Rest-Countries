@@ -111,7 +111,7 @@ export default function CountryDetailPage() {
     const weatherUrl =
         `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${encodeURIComponent(`${capital}, ${country?.name?.common}`)}`;
 
-    console.log(weatherUrl)
+    
 
     const {
         data: weather,
