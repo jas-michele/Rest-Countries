@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { GeoJSON } from "react-leaflet";
 import worldGeo from "../data/world.json"
+import useWeather from "../hooks/useWeather";
 
 
 import { useNavigate } from "react-router-dom";
@@ -26,18 +27,54 @@ const customIcon = new L.Icon({
     iconAnchor: [12, 41],
 });
 
-console.log("MapView rendering")
+interface WeatherData {
+    temp: number;
+    condition: string;
+    icon?: string;
+}
 
 export default function MapView() {
     const center: [number, number] = [20, 0];
     const navigate = useNavigate();
     const location = useLocation();
     const [search, setSearch] = useState("");
+    const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
+
+    
+    const getWeather = async (
+        capital: string,
+        countryName: string
+    ): Promise<WeatherData | null> => {
+         try {
+            const response = await fetch(
+                `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${encodeURIComponent(
+                 `${capital}, ${countryName}`
+                 )}`
+                );
+
+            const data = await response.json();
+
+            return {
+                 temp: Math.round(data.current.temp_f),
+                 condition: data.current.condition.text,
+                 icon: data.current.condition.icon,
+                };
+            } catch (error) {
+                 console.error("Weather fetch failed:", error);
+                    return null;
+                 }
+            };
+
+            
+
+    
 
 
     const { data: countries, loading, error } =
         useCountries<any[]>("https://restcountries.com/v3.1/all?fields=name,latlng");
 
+
+    const weatherURL =  `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${encodeURIComponent(`${capital}, ${country?.name?.common}`)}`;
 
     const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -47,7 +84,7 @@ export default function MapView() {
             .includes(search.toLocaleLowerCase())
 )
 
-console.log(filteredCountries)
+
 
     useEffect(() => {
         const stored = localStorage.getItem("favorites");
