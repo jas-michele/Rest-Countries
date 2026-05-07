@@ -146,6 +146,13 @@ export default function CountryDetailPage() {
                     : "⭐️ Add to Favorites"}
             </button>
 
+            <button onClick={toggleVisited}>
+                {visited.includes(country.name.common)
+                    ? "Remove Visited"
+                    : "✅ Mark as Visited"
+                }
+            </button>
+
             <img
                 src={country.flags.png}
                 alt={country.name.common}
