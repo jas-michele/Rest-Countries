@@ -51,12 +51,12 @@ export default function CountryDetailPage() {
     const toggleFavorite = () => {
         if (!country) return;
 
-        const name = country.name.common;
+        const code = country.name.common;
 
-        if (favorites.includes(name)) {
-            setFavorites(favorites.filter((f) => f !== name))
+        if (favorites.includes(code)) {
+            setFavorites(favorites.filter((f) => f !== code))
         } else {
-            setFavorites([...favorites, name])
+            setFavorites([...favorites, code])
         }
     }
 
@@ -80,12 +80,12 @@ export default function CountryDetailPage() {
     const toggleVisited = () => {
         if (!country) return;
 
-        const name = country.name.common;
+        const code = country.name.common;
 
-        if (visited.includes(name)) {
-            setVisted(visited.filter((v) => v !== name))
+        if (visited.includes(code)) {
+            setVisted(visited.filter((v) => v !== code))
         } else {
-            setVisted([...visited, name])
+            setVisted([...visited, code])
         }
     }
 

@@ -44,6 +44,7 @@ export default function MapView() {
 
 
     const [favorites, setFavorites] = useState<string[]>([]);
+    const [visited, setVisted] = useState<string[]>([]);
 
     const filteredCountries = countries?.filter((country) =>
         country.name.common
@@ -62,6 +63,19 @@ export default function MapView() {
                 console.error("Bad favorites data")
             }
         }
+    }, [location])
+
+    useEffect(() => {
+        const storedVisited = localStorage.getItem("visited");
+
+        if (storedVisited) {
+            try {
+                setVisted(JSON.parse(storedVisited));
+            } catch {
+                console.error("Bad visited data")
+            }
+        }
+
     }, [location])
 
 
@@ -91,14 +105,22 @@ export default function MapView() {
                 <GeoJSON
                     data={worldGeo as any}
                     style={(feature) => {
-                        const countryName = feature.properties?.name;
+                        console.log(feature.properties)
+
+                        const countryName= feature.properties?.name
 
                         const isFavorite = favorites.includes(countryName);
 
+                        const isVisited = visited.includes(countryName);
+
+                        
 
                         return {
-                            fillColor: isFavorite
+                            fillColor: 
+                            isFavorite
                                 ? "#FFD700"
+                                :isVisited
+                                ? "#22c55e"
                                 : "#3b82f6",
 
                             weight: 1,
@@ -110,6 +132,8 @@ export default function MapView() {
 
                     onEachFeature={(feature, layer) => {
                         const countryName = feature.properties.name;
+
+                        const countryCode = feature.properties.iso_a3;
 
                         const capital = feature.properties.capital || countryName;
 
@@ -147,23 +171,14 @@ export default function MapView() {
                                                 `
                                     }
 
-                                        <button id="details-btn">
+                                        <button 
+                                             onclick="window.location.href='/country/${encodeURIComponent(countryName)}'"
+                                             >
                                              View Details
                                           </button>      
                                         
                                         </div>
                                         `);
-
-                                setTimeout(() => {
-                                    const btn =
-                                        document.getElementById("details-btn");
-
-                                    btn?.addEventListener("click", () => {
-                                        navigate(
-                                            `/country/${encodeURIComponent(countryName)}`
-                                        )
-                                    })
-                                }, 0);
                             }
                         })
                     }}
