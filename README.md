@@ -1,75 +1,68 @@
-# React + TypeScript + Vite
+## World Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive world expolartion application built with React, TypeScript, and Leaflet.
+Users can explore countries on a interactive map, view real-time weather data, save favorite 
+countries, track visited countries, and navigate through border nations.
 
-Currently, two official plugins are available:
+## Features 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Interactive world map using Leaflet and GeoJSON
+- Search countries dynamically
+- Add countires to Favorites
+- Mark countries as Visited 
+- Real-time weather integration
+- Google Maps integration
+- Interactive country popups
+- Border country navigation
+- Persistent localStorage state
+- Custom styled UI with responsive design
+- Hover effects on countries
 
-## React Compiler
+## Technologies Useed
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- React
+- Typescript
+- Vite
+- React Router DOM
+- React Leaflet
+- Leaflet
+- REST Countries API
+- Weather API 
+- CSS3
 
-Note: This will impact Vite dev & build performances.
+## APIs Used
 
-## Expanding the ESLint configuration
+Rest Sountries API
+Used for: 
+- Country information
+- Population
+- Capital
+- Region
+- Flags
+- Border countries
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+WeatherAPI
+Used for:
+- Current weather conditions
+- Temperature
+- Humidity
+- Wind Speed 
+- Weather Icons
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Future Improvements
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Dark mode/ theme switcher
+- Currency conversion
+- Country comparison feature
+- Travel journal system
+- Improved mobile optimization
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Reflection
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+During the development of this project, I focused on building an interactive and visually engaging world exploration experience using React, TypeScript, React Leaflet, and external APIs. The application allows users to explore countries on an interactive map, search for countries, save favorites, track visited countries, view real-time weather data, and navigate to detailed country information pages.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+One of the biggest challenges I faced was handling inconsistencies between the GeoJSON dataset and the REST Countries API. Certain countries had different naming conventions, which caused navigation and data-fetching issues. To solve this problem, I implemented a country alias mapping system to normalize country names and improve routing between the map and country detail pages. Another challenge was integrating asynchronous weather data into Leaflet popups while maintaining smooth interactions and responsive UI updates.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Throughout the process, I focused heavily on improving the user experience and visual design. I redesigned the layout into a full-screen interactive map with floating UI elements, custom styling, hover effects, responsive design, and persistent localStorage state for favorites and visited countries.
+
+If I continue improving this project, I would like to add additional features such as dark mode, country comparison tools, and more advanced mobile responsiveness. I would also improve edge-case handling for country data inconsistencies across APIs.

@@ -346,3 +346,58 @@ button:hover {
 
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+
+  .search-bar {
+    width: 85%;
+
+    font-size: 14px;
+
+    padding: 10px 14px;
+  }
+
+  .map-legend {
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    bottom: 15px;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    width: 85%;
+
+    font-size: 13px;
+  }
+
+  .country-card {
+    padding: 20px;
+  }
+
+  .top-bar {
+    flex-direction: column;
+
+    gap: 16px;
+  }
+
+  .country-actions {
+    flex-wrap: wrap;
+
+    justify-content: center;
+  }
+
+  .country-title {
+    font-size: 28px;
+  }
+
+  .country-flag {
+    max-width: 100%;
+  }
+
+  .weather-card {
+    width: 100%;
+  }
+}
