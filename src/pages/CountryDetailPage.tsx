@@ -135,16 +135,20 @@ export default function CountryDetailPage() {
     console.log("Decoded", decodedName)
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="country-page">
+            
+            <div className="country-card">
+
+        <div className="top-bar">
             <button onClick={() => navigate(-1)}>⬅ Back</button>
 
-            <h1>{country.name.common}</h1>
+            <div className="country-actions">
 
-            <button onClick={toggleFavorite}>
+              <button onClick={toggleFavorite}>
                 {favorites.includes(country.name.common)
                     ? "Remove Favorite"
                     : "⭐️ Add to Favorites"}
-            </button>
+              </button>
 
             <button onClick={toggleVisited}>
                 {visited.includes(country.name.common)
@@ -152,27 +156,37 @@ export default function CountryDetailPage() {
                     : "✅ Mark as Visited"
                 }
             </button>
+         </div>
+         </div>
+
+          <h1 className="country-title">
+                {country.name.common}
+            </h1>
 
             <img
                 src={country.flags.png}
                 alt={country.name.common}
-                style={{ width: "200px", marginTop: "10px" }}
+                className="country-flag"
             />
+
+            <div className="country-content">
 
             <p><strong>Capital:</strong> {country?.capital?.[0]} </p>
             <p><strong>Region:</strong> {country.region} </p>
             <p><strong>Population</strong> {country.population.toLocaleString()} </p>
+            
+            </div>
 
             <br />
 
-            <h2>Current Weather</h2>
+            <h2 className="weather-title">Current Weather</h2>
 
             {weatherLoading && <p>Loading weather...</p>}
 
             {weatherError && <p>Error loading weather</p>}
 
             {weather && (
-                <div>
+                <div className="weather-card">
                     <p>
                         🌡️ Temperature: {weather.current.temp_f}°F
                     </p>
@@ -188,27 +202,32 @@ export default function CountryDetailPage() {
                 </div>
             )}
 
+            <div className="maps-container">
+
             {lat !== undefined && lng !== undefined && (
                 <a
-                    href={`https://www.google.com/maps?q=${lat},${lng}`}
+                    href={`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                        display: "inline-block",
-                        marginTop: "15px",
-                        textDecoration: "none"
+                    className="maps-button"
 
-                    }}
+                
                 >
                     📍 View on Google Maps
                 </a>
 
-
             )}
 
+            </div>
+
+
+
             {country.borders && (
-                <div style={{ marginTop: "10px" }}>
+                <div className="border-section">
+
                     <h3>Border Countries</h3>
+
+                    <div className="border-buttons">
 
                     {country.borders.map((code: string) => {
                         const borderCountry = allCountries.find(
@@ -225,14 +244,17 @@ export default function CountryDetailPage() {
                                         `/country/${encodeURIComponent(borderCountry.name.common)}`
                                     )
                                 }
-                                style={{ marginRight: "10px" }}
+                               className="border-country-btn"
                             >
                                 {borderCountry.name.common}
                             </button>
                         )
                     })}
                 </div>
+                </div>
             )}
         </div>
+        </div>
+        
     )
 }

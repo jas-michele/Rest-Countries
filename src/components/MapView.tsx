@@ -93,13 +93,13 @@ export default function MapView() {
     if (!countries) return null;
 
     return (
-        <div>
+        <div className="map-wrapper">
             <input
                 type="text"
                 placeholder="Search country... "
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{ marginBottom: "10px", padding: "8px", width: "100%" }}
+                className="search-bar"
             />
 
             <MapContainer
@@ -109,7 +109,10 @@ export default function MapView() {
                 className="map"
             >
 
-                <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+            <TileLayer
+                key="voyager"
+                url="https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png" 
+            />
 
                 <GeoJSON
                     data={worldGeo as any}
@@ -130,7 +133,7 @@ export default function MapView() {
                                 ? "#FFD700"
                                 :isVisited
                                 ? "#22c55e"
-                                : "#3b82f6",
+                                : "#f472b6",
 
                             weight: 1,
                             color: "#0f172a",
@@ -160,7 +163,7 @@ export default function MapView() {
 
                             mouseout: (e) => {
                                 e.target.setStyle({
-                                    fillOpacity: 0.8,
+                                    fillOpacity: 0.9,
                                     weight: 1
                                 })
                             },
@@ -229,6 +232,26 @@ export default function MapView() {
                     ))}
 
             </MapContainer>
+
+            <div className="map-legend">
+                <div>
+                    <span className="legend-boxx visited">
+                        Visited
+                    </span>
+                </div>
+
+                <div>
+                    <span className="legend-boxx favorite">
+                        Favorite
+                    </span>
+                </div>
+
+                <div>
+                    <span className="legend-box explore">
+                        Explore
+                    </span>
+                </div>
+            </div>
         </div>
     )
 }
