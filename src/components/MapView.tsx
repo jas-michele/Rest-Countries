@@ -170,7 +170,7 @@ export default function MapView() {
 
                             click: async () => {
                                 layer.bindPopup(`
-                                    <div class="popup">
+                                    <div class="popup-card">
                                     <h3>${countryName}</h3>
                                     <p>Loading weather...</p>
                                     </div>
@@ -182,7 +182,7 @@ export default function MapView() {
                                 );
 
                                 layer.setPopupContent(`
-                                        <div class="popup">
+                                        <div class="popup-card">
                                         <h3>${countryName}</h3>
 
                                         ${weather

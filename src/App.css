@@ -101,7 +101,7 @@ body {
   width: 100%;
   max-width: 700px;
 
-  background: rgba(255,255,255,0.92);
+  background: #6f99cd;
 
   border-radius: 24px;
 
@@ -263,4 +263,86 @@ body {
   margin-top: 32px;
 
   margin-bottom: 16px;
+}
+
+button {
+  border: none;
+
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+button:hover {
+  transform: translateY(-2px);
+
+  opacity: 0.95;
+}
+
+.favorite-btn {
+  background: #e2d170;
+
+  color: black;
+}
+
+.visited-btn {
+  background: #34d36e;
+
+  color: white;
+}
+
+.back-btn {
+  background: white;
+
+  color: black;
+}
+
+.popup-card {
+  text-align: center;
+
+  min-width: 180px;
+
+  padding: 10px;
+}
+
+.popup-card h3 {
+  margin-bottom: 10px;
+
+  font-size: 20px;
+}
+
+.popup-card img {
+  width: 64px;
+}
+
+.popup-card p {
+  margin: 8px 0;
+
+  font-weight: 500;
+}
+
+.popup-card button {
+  margin-top: 10px;
+
+  background: #f472b6;
+
+  color: white;
+
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  font-weight: 600;
 }

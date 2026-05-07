@@ -140,17 +140,17 @@ export default function CountryDetailPage() {
             <div className="country-card">
 
         <div className="top-bar">
-            <button onClick={() => navigate(-1)}>⬅ Back</button>
+            <button onClick={() => navigate(-1)} className="back-btn">⬅ Back</button>
 
             <div className="country-actions">
 
-              <button onClick={toggleFavorite}>
+              <button onClick={toggleFavorite} className="favorite-btn">
                 {favorites.includes(country.name.common)
                     ? "Remove Favorite"
                     : "⭐️ Add to Favorites"}
               </button>
 
-            <button onClick={toggleVisited}>
+            <button onClick={toggleVisited} className="visited-btn">
                 {visited.includes(country.name.common)
                     ? "Remove Visited"
                     : "✅ Mark as Visited"
