@@ -27,6 +27,7 @@ export default function CountryDetailPage() {
     const decodedName = decodeURIComponent(name || "");
     const navigate = useNavigate();
     const [favorites, setFavorites] = useState<string[]>([]);
+    const [visited, setVisted] = useState<string[]>([])
 
     useEffect(() => {
         const stored = localStorage.getItem("favorites");
@@ -56,6 +57,35 @@ export default function CountryDetailPage() {
             setFavorites(favorites.filter((f) => f !== name))
         } else {
             setFavorites([...favorites, name])
+        }
+    }
+
+    useEffect(() => {
+
+        const storedVisited = localStorage.getItem("visited");
+
+        if (storedVisited) {
+            try {
+                setVisted(JSON.parse(storedVisited));
+            } catch {
+                console.error("Bad visited data")
+            }
+        }
+    }, [location])
+
+    useEffect(() => {
+        localStorage.setItem("visited", JSON.stringify(visited))
+    }, [visited])
+
+    const toggleVisited = () => {
+        if (!country) return;
+
+        const name = country.name.common;
+
+        if (visited.includes(name)) {
+            setVisted(visited.filter((v) => v !== name))
+        } else {
+            setVisted([...visited, name])
         }
     }
 
