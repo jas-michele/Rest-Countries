@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { GeoJSON } from "react-leaflet";
 import worldGeo from "../data/world.json"
-import useWeather from "../hooks/useWeather";
+import { getWeather } from "../services/weatherServices";
 
 
 import { useNavigate } from "react-router-dom";
@@ -27,11 +27,6 @@ const customIcon = new L.Icon({
     iconAnchor: [12, 41],
 });
 
-interface WeatherData {
-    temp: number;
-    condition: string;
-    icon?: string;
-}
 
 export default function MapView() {
     const center: [number, number] = [20, 0];
@@ -40,49 +35,21 @@ export default function MapView() {
     const [search, setSearch] = useState("");
     const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
 
-    
-    const getWeather = async (
-        capital: string,
-        countryName: string
-    ): Promise<WeatherData | null> => {
-         try {
-            const response = await fetch(
-                `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${encodeURIComponent(
-                 `${capital}, ${countryName}`
-                 )}`
-                );
 
-            const data = await response.json();
 
-            return {
-                 temp: Math.round(data.current.temp_f),
-                 condition: data.current.condition.text,
-                 icon: data.current.condition.icon,
-                };
-            } catch (error) {
-                 console.error("Weather fetch failed:", error);
-                    return null;
-                 }
-            };
-
-            
-
-    
 
 
     const { data: countries, loading, error } =
         useCountries<any[]>("https://restcountries.com/v3.1/all?fields=name,latlng");
 
 
-    const weatherURL =  `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${encodeURIComponent(`${capital}, ${country?.name?.common}`)}`;
-
     const [favorites, setFavorites] = useState<string[]>([]);
 
     const filteredCountries = countries?.filter((country) =>
-            country.name.common
+        country.name.common
             .toLowerCase()
             .includes(search.toLocaleLowerCase())
-)
+    )
 
 
 
@@ -127,12 +94,12 @@ export default function MapView() {
                         const countryName = feature.properties?.name;
 
                         const isFavorite = favorites.includes(countryName);
-               
+
 
                         return {
                             fillColor: isFavorite
-                            ? "#FFD700"
-                            : "#3b82f6",
+                                ? "#FFD700"
+                                : "#3b82f6",
 
                             weight: 1,
                             color: "#0f172a",
@@ -144,34 +111,80 @@ export default function MapView() {
                     onEachFeature={(feature, layer) => {
                         const countryName = feature.properties.name;
 
+                        const capital = feature.properties.capital || countryName;
+
                         layer.on({
-                            click: () => {
-                                navigate(
-                                    `/country/${encodeURIComponent(countryName)}`
-                                )
+                            click: async () => {
+                                layer.bindPopup(`
+                                    <div class="popup">
+                                    <h3>${countryName}</h3>
+                                    <p>Loading weather...</p>
+                                    </div>
+                                    `).openPopup();
+
+                                const weather = await getWeather(
+                                    capital,
+                                    countryName
+                                );
+
+                                layer.setPopupContent(`
+                                        <div class="popup">
+                                        <h3>${countryName}</h3>
+
+                                        ${weather
+                                        ? `
+                                                <img 
+                                                    src="https:${weather.icon}"
+                                                    alt="${weather.condition}"
+                                                />
+                                                
+                                                <p>
+                                                    ${weather.temp}°F ${weather.condition}
+                                                </p>
+                                                `
+                                        : `
+                                                  <p>Weather unavailable</p>
+                                                `
+                                    }
+
+                                        <button id="details-btn">
+                                             View Details
+                                          </button>      
+                                        
+                                        </div>
+                                        `);
+
+                                setTimeout(() => {
+                                    const btn =
+                                        document.getElementById("details-btn");
+
+                                    btn?.addEventListener("click", () => {
+                                        navigate(
+                                            `/country/${encodeURIComponent(countryName)}`
+                                        )
+                                    })
+                                }, 0);
                             }
                         })
                     }}
-
                 />
 
                 {search &&
-                filteredCountries.map((country) => (
-                    <Marker
-                        key={country.name.common}
-                        position={[
-                            country.latlng[0],
-                            country.latlng[1],
-                        ] as [number, number]}
-                        icon={customIcon as any}
-                    >  
-                    
-                    <Popup>
-                        {country.name.common}
-                    </Popup>
-                       
-                    </Marker>
-                ))}
+                    filteredCountries.map((country) => (
+                        <Marker
+                            key={country.name.common}
+                            position={[
+                                country.latlng[0],
+                                country.latlng[1],
+
+                            ] as [number, number]}
+                            icon={customIcon as any}
+                        >
+                            <Popup>
+                                {country.name.common}
+                            </Popup>
+                        </Marker>
+                    ))}
 
             </MapContainer>
         </div>
