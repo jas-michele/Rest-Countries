@@ -140,7 +140,37 @@ export default function CountryDetailPage() {
             <div className="country-card">
 
         <div className="top-bar">
-            <button onClick={() => navigate(-1)} className="back-btn">⬅ Back</button>
+
+            <div className="top-left-buttons">
+
+            <button
+                onClick={() => navigate("/")}
+                className="home-btn"
+            >
+                🌎 Home
+            </button>
+
+            <button 
+            onClick={() => {
+
+                navigate(-1);
+
+                setTimeout(() => { 
+            
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                });
+
+            }, 50)
+
+            }}
+             className="back-btn"
+            >
+                ⬅ Back
+            </button>
+
+            </div>
 
             <div className="country-actions">
 
@@ -239,11 +269,18 @@ export default function CountryDetailPage() {
                         return (
                             <button
                                 key={code}
-                                onClick={() =>
+                                onClick={() => {
+
                                     navigate(
-                                        `/country/${encodeURIComponent(borderCountry.name.common)}`
-                                    )
-                                }
+                                        `/country/${encodeURIComponent(borderCountry.name.common
+                                        )}`
+                                    );
+
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: "smooth",
+                                    })
+                                }}
                                className="border-country-btn"
                             >
                                 {borderCountry.name.common}

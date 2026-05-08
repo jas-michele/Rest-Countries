@@ -10,7 +10,6 @@ import { GeoJSON } from "react-leaflet";
 import worldGeo from "../data/world.json"
 import { getWeather } from "../services/weatherServices";
 
-
 import { useNavigate } from "react-router-dom";
 
 delete (L.Icon.Default.prototype as any).getIconUrl;
@@ -39,11 +38,9 @@ const countryAlias: Record<string, string> = {
 
 export default function MapView() {
     const center: [number, number] = [20, 0];
-    const navigate = useNavigate();
     const location = useLocation();
     const [search, setSearch] = useState("");
-    const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
-
+    const navigate = useNavigate();
 
 
 
@@ -109,31 +106,31 @@ export default function MapView() {
                 className="map"
             >
 
-            <TileLayer
-                key="voyager"
-                url="https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png" 
-            />
+                <TileLayer
+                    key="voyager"
+                    url="https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png"
+                />
 
                 <GeoJSON
                     data={worldGeo as any}
                     style={(feature) => {
-                        console.log(feature.properties)
 
-                        const countryName= feature.properties?.name
+
+                        const countryName = feature?.properties?.name || "";
 
                         const isFavorite = favorites.includes(countryName);
 
                         const isVisited = visited.includes(countryName);
 
-                        
+
 
                         return {
-                            fillColor: 
-                            isFavorite
-                                ? "#FFD700"
-                                :isVisited
-                                ? "#22c55e"
-                                : "#f472b6",
+                            fillColor:
+                                isFavorite
+                                    ? "#FFD700"
+                                    : isVisited
+                                        ? "#22c55e"
+                                        : "#f472b6",
 
                             weight: 1,
                             color: "#0f172a",
@@ -146,10 +143,10 @@ export default function MapView() {
                         const countryName = feature.properties.name;
 
                         console.log(countryName)
-                        const normalizedName = 
+                        const normalizedName =
                             countryAlias[countryName] || countryName;
 
-                        const countryCode = feature.properties.iso_a3;
+
 
                         const capital = feature.properties.capital || countryName;
 
@@ -202,21 +199,39 @@ export default function MapView() {
                                                 `
                                     }
 
-                                        <button 
-                                             onclick="window.location.href='/country/${encodeURIComponent(normalizedName)}'"
-                                             >
+                                        <button id="details-btn-${countryName}" >
                                              View Details
                                           </button>      
                                         
                                         </div>
                                         `);
+
+
+                               setTimeout(() => {
+
+                                     const btn =
+                                    document.getElementById(
+                                    `details-btn-${countryName}`
+                                    );
+
+                                     btn?.addEventListener("click", () => {
+
+                                      navigate(
+                                          `/country/${encodeURIComponent(normalizedName)}`
+                                              );
+
+                                             });
+
+                                            }, 0);
+
                             }
                         })
                     }}
                 />
 
+
                 {search &&
-                    filteredCountries.map((country) => (
+                    filteredCountries?.map((country) => (
                         <Marker
                             key={country.name.common}
                             position={[

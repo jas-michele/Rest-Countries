@@ -8,7 +8,7 @@ function App() {
 
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="Rest-Countries">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/country/:name" element={<CountryDetailPage />} />

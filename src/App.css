@@ -401,3 +401,9 @@ button:hover {
     width: 100%;
   }
 }
+
+.top-left-buttons {
+  display: flex;
+
+  gap: 12px;
+}

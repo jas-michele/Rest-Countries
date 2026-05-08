@@ -57,6 +57,10 @@ Used for:
 - Travel journal system
 - Improved mobile optimization
 
+# Deployed Link
+
+- https://jas-michele.github.io/Rest-Countries/
+
 ## Reflection
 
 During the development of this project, I focused on building an interactive and visually engaging world exploration experience using React, TypeScript, React Leaflet, and external APIs. The application allows users to explore countries on an interactive map, search for countries, save favorites, track visited countries, view real-time weather data, and navigate to detailed country information pages.
